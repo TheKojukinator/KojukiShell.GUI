@@ -1,0 +1,17 @@
+# ignore everything eveywhere
+*
+
+# allow folder recursion
+!*/
+
+# allow .gitignore at top level
+!.gitignore
+
+# whitelist these file types everywhere
+!**/*.ps1
+!**/*.psm1
+!**/*.psd1
+!**/*.xml
+
+# regardless of above, ignore these folder everywhere
+**\.vscode/
