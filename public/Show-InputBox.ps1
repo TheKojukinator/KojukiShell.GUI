@@ -95,7 +95,7 @@ Function Show-InputBox {
                 $txtInput.Multiline = $true
                 $txtInput.ScrollBars = [System.Windows.Forms.ScrollBars]::Both
                 $txtInput.AcceptsReturn = $AcceptReturn
-                $txtInput.AcceptsTab = $AcceptsTab
+                $txtInput.AcceptsTab = $AcceptTab
                 $txtInput.WordWrap = $WordWrap
                 # grow the input box vertically to better accomodate multi-line input
                 $txtInput.Height *= $multiShift
