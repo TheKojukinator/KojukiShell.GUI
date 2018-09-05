@@ -1,51 +1,41 @@
-# load the necessary assembly
-Add-Type -AssemblyName System.Windows.Forms
 Function Show-FileSaveBox {
     <#
     .SYNOPSIS
-    Select file to save.
-
+        Select file to save.
     .DESCRIPTION
-    This function leverages SaveFileDialog to allow the user to select a file.
+        This function leverages SaveFileDialog to allow the user to select a file.
 
-    For more information visit: https://msdn.microsoft.com/en-us/library/system.windows.forms.SaveFileDialog(v=vs.110).aspx
-
+        For more information visit: https://msdn.microsoft.com/en-us/library/system.windows.forms.SaveFileDialog(v=vs.110).aspx
     .PARAMETER Title
-    Title of the window.
-
+        Title of the window.
     .PARAMETER InitialDirectory
-    Initial directory that will be shown. If not provided, will default to the current user profile.
-
+        Initial directory that will be shown. If not provided, will default to the current user profile.
     .PARAMETER Filter
-    File filter(s) to be used by SaveFileDialog.
+        File filter(s) to be used by SaveFileDialog.
 
-    If ommited, it will default to:
-        "All files (*.*)|*.*"
+        If ommited, it will default to:
+            "All files (*.*)|*.*"
 
-    Other examples:
-        "Text files (*.txt)|*.txt|All files (*.*)|*.*"
-        "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
+        Other examples:
+            "Text files (*.txt)|*.txt|All files (*.*)|*.*"
+            "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
 
-    For more information visit: https://msdn.microsoft.com/en-us/library/system.windows.forms.filedialog.filter(v=vs.110).aspx
-
+        For more information visit: https://msdn.microsoft.com/en-us/library/system.windows.forms.filedialog.filter(v=vs.110).aspx
     .PARAMETER FilterIndex
-    Which filter is selected by default. If ommited, it will default to 1.
+        Which filter is selected by default. If ommited, it will default to 1.
 
-    For more information visit: https://msdn.microsoft.com/en-us/library/system.windows.forms.filedialog.filterindex(v=vs.110).aspx
-
+        For more information visit: https://msdn.microsoft.com/en-us/library/system.windows.forms.filedialog.filterindex(v=vs.110).aspx
     .OUTPUTS
-    [System.IO.FileInfo] containing selected file.
-
+        [System.IO.FileInfo] containing selected file.
     .EXAMPLE
-    Show-FileSaveBox "Select a File"
-    Mode                LastWriteTime         Length Name
-    ----                -------------         ------ ----
-    -a----        7/10/2018  11:22 AM            354 SelectedDocument.pdf
-
+        Show-FileSaveBox "Select a File"
+        Mode                LastWriteTime         Length Name
+        ----                -------------         ------ ----
+        -a----        7/10/2018  11:22 AM            354 SelectedDocument.pdf
     #>
     [CmdletBinding()]
     [OutputType([System.IO.FileInfo])]
-    Param(
+    param(
         [Parameter(Position = 0, Mandatory)]
         [ValidateNotNullOrEmpty()]
         [string] $Title,
@@ -54,21 +44,19 @@ Function Show-FileSaveBox {
         [string] $Filter = "All files (*.*)|*.*",
         [int] $FilterIndex = 1
     )
-    Process {
+    process {
         try {
-            # create an SaveFileDialog
+            # create a SaveFileDialog
             $form = New-Object System.Windows.Forms.SaveFileDialog
-            # set its Title
             $form.Title = $Title
+            $form.Filter = $Filter
+            $form.FilterIndex = $FilterIndex
             # if the InitialDirectory is provided, use it, otherwise default to the current user profile
             if (![string]::IsNullOrWhiteSpace($InitialDirectory)) {
                 $form.InitialDirectory = $InitialDirectory
             } else {
                 $form.InitialDirectory = $env:USERPROFILE
             }
-            # set the filter, and the index of the default filter selection
-            $form.Filter = $Filter
-            $form.FilterIndex = $FilterIndex
             # show the form, if anything but OK is returned, throw an exception, otherwise return the selected file(s)
             if ($form.ShowDialog((Get-ScriptWindowHandle -IWin32Window)) -eq [Windows.Forms.DialogResult]::OK) {
                 return (New-Object IO.FileInfo $form.Filename)

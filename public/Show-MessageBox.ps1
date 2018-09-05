@@ -1,45 +1,34 @@
-# load the necessary assembly
-Add-Type -AssemblyName System.Windows.Forms
 Function Show-MessageBox {
     <#
     .SYNOPSIS
-    Display a Message Box.
-
+        Display a Message Box.
     .DESCRIPTION
-    This function leverages [System.Windows.Forms.MessageBox] to display a Message Box with custom parameters.
-
+        This function leverages [System.Windows.Forms.MessageBox] to display a Message Box with custom parameters.
     .PARAMETER Title
-    Title text.
-
+        Title text.
     .PARAMETER Message
-    Message text.
-
+        Message text.
     .PARAMETER Buttons
-    One of [System.Windows.Forms.MessageBoxButtons] values to determine the visible button(s):
-        OK, OKCancel, AbortRetryIgnore, YesNoCancel, YesNo, RetryCancel
-
+        One of [System.Windows.Forms.MessageBoxButtons] values to determine the visible button(s):
+            OK, OKCancel, AbortRetryIgnore, YesNoCancel, YesNo, RetryCancel
     .PARAMETER Icon
-    One of [System.Windows.Forms.MessageBoxIcon] values to determine the visible icon:
-        None, Hand, Hand, Hand, Question, Warning, Warning, Asterisk, Asterisk
-
+        One of [System.Windows.Forms.MessageBoxIcon] values to determine the visible icon:
+            None, Hand, Hand, Hand, Question, Warning, Warning, Asterisk, Asterisk
     .PARAMETER DefaultButton
-    One of [System.Windows.Forms.MessageBoxDefaultButton] values to determine the default selected button:
-        Button1, Button2, Button3
-
+        One of [System.Windows.Forms.MessageBoxDefaultButton] values to determine the default selected button:
+            Button1, Button2, Button3
     .OUTPUTS
-    [System.Windows.Forms.DialogResult] value, one of {None, OK, Cancel, Abort, Retry, Ignore, Yes, No}
-
+        [System.Windows.Forms.DialogResult] value, one of {None, OK, Cancel, Abort, Retry, Ignore, Yes, No}
     .EXAMPLE
-    Show-MessageBox "Notificaiton" "Hey, you're awesome!"
-    OK
-
+        Show-MessageBox "Notificaiton" "Hey, you're awesome!"
+        OK
     .EXAMPLE
-    Show-MessageBox "Uh Oh!" "Something went wrong!" AbortRetryIgnore Asterisk
-    Retry
+        Show-MessageBox "Uh Oh!" "Something went wrong!" AbortRetryIgnore Asterisk
+        Retry
     #>
     [CmdletBinding()]
     [OutputType([System.Windows.Forms.DialogResult])]
-    Param(
+    param(
         [Parameter(Position = 0, Mandatory)]
         [ValidateNotNullOrEmpty()]
         [string] $Title,
@@ -53,7 +42,7 @@ Function Show-MessageBox {
         [Parameter(Position = 4)]
         [System.Windows.Forms.MessageBoxDefaultButton] $DefaultButton = [System.Windows.Forms.MessageBoxDefaultButton]::Button1
     )
-    Process {
+    process {
         try {
             # show message box with specified parameters and return the returned value
             # the first parameter generates a IWin32Window to use as the parent, to make sure the window spawns as the top-most

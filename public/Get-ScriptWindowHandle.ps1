@@ -1,45 +1,41 @@
-# load the necessary assembly
-Add-Type -AssemblyName System.Windows.Forms
 Function Get-ScriptWindowHandle {
     <#
     .SYNOPSIS
-    Get the window handle of what is spawning the script.
-
+        Get the window handle of what is spawning the script.
     .DESCRIPTION
-    Starting with the Process ID of the PowerShell.exe instance executing the script, this function traverses the process parent chain until it finds a process with a Window Handle.
-
+        Starting with the Process ID of the PowerShell.exe instance executing the script, this function traverses the process parent chain until it finds a process with a Window Handle.
     .PARAMETER IWin32Window
-    Returns NativeWindow instead of IntPtr.
-
+        Returns NativeWindow instead of IntPtr.
     .OUTPUTS
-    [System.IntPtr] by default.
-    [System.Windows.Forms.NativeWindow] if using IWin32Window switch.
-
+        [System.IntPtr] by default.
+        [System.Windows.Forms.NativeWindow] if using IWin32Window switch.
     .EXAMPLE
-    Get-ScriptWindowHandle
-    15338922
-
+        Get-ScriptWindowHandle
+        15338922
     .EXAMPLE
-    Get-ScriptWindowHandle -IWin32Window
-      Handle
-      ------
-    15338922
+        Get-ScriptWindowHandle -IWin32Window
+        Handle
+        ------
+        658874
     #>
     [CmdletBinding(DefaultParameterSetName = "Default")]
     [OutputType([System.IntPtr], ParameterSetName = "Default")]
     [OutputType([System.Windows.Forms.NativeWindow], ParameterSetName = "IWin32Window")]
-    Param(
+    param(
         [Parameter(ParameterSetName = "IWin32Window")]
         [switch] $IWin32Window
     )
-    Process {
+    process {
         try {
-            $procID = $PID
-            $windowHandle = (Get-process -Id $procID).MainWindowHandle
-            while ($windowHandle.ToInt32() -le 0) {
-                $procID = (Get-CimInstance Win32_Process -Filter "ProcessID = $procID").ParentProcessId
-                $windowHandle = (Get-process -Id $procID).MainWindowHandle
+            # get PID of shell and attempt to get the MainWindowHandle
+            $ppID = $PID
+            $windowHandle = (Get-process -Id $ppID).MainWindowHandle
+            # as long as ppID is not null and windowHandle is le 0, work up the process chain till windowHandle is gt 0
+            while ($null -ne $ppID -and $windowHandle.ToInt32() -le 0) {
+                $ppID = (Get-CimInstance Win32_Process -Filter "ProcessID = $ppID").ParentProcessId
+                $windowHandle = (Get-process -Id $ppID).MainWindowHandle
             }
+            # return the windowHandle in appropriate format
             if ($IWin32Window) {
                 $nativeWindow = New-Object System.Windows.Forms.NativeWindow
                 $nativeWindow.AssignHandle($windowHandle)
