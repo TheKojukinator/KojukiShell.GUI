@@ -12,6 +12,8 @@
 !**/*.psm1
 !**/*.psd1
 !**/*.xml
+!**/*.json
+!**/*.md
 
 # regardless of above, ignore these folder everywhere
-**\.vscode/
+#**\.vscode/
