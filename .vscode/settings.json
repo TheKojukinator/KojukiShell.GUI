@@ -1,0 +1,14 @@
+{
+    // VSCode Workspace Settings
+    // Editor tab handling
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    // PowerShell code formatting
+    "powershell.codeFormatting.preset": "OTBS",
+    "powershell.codeFormatting.whitespaceAfterSeparator": true,
+    "powershell.codeFormatting.whitespaceAroundOperator": true,
+    "powershell.codeFormatting.whitespaceBeforeOpenBrace": true,
+    "powershell.codeFormatting.whitespaceBeforeOpenParen": true,
+    "powershell.codeFormatting.alignPropertyValuePairs": true,
+    "powershell.codeFormatting.ignoreOneLineBlock": true,
+}
